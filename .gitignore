@@ -12,7 +12,7 @@
 # next.js
 /.next/
 /out/
-
+.env
 # production
 /build
 
@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+/src/generated/prisma

@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  fulfilled
+  awaiting_shipment
+  shipped
+}
+
+enum PhoneModel {
+  iPhone_16_Pro
+  iPhone_16_Pro_Max
+  iPhone_16
+  iPhone_16_Plus
+  iPhone_15_Pro
+  iPhone_15_Pro_Max
+  iPhone_15
+  iPhone_15_Plus
+  iPhone_14_Pro
+  iPhone_14_Pro_Max
+  iPhone_14
+  iPhone_14_Plus
+  iPhone_13_Pro
+  iPhone_13_Pro_Max
+  iPhone_13
+  iPhone_13_Mini
+  iPhone_12_Pro
+  iPhone_12_Pro_Max
+  iPhone_12
+  iPhone_12_Mini
+  iPhone_11_Pro
+  iPhone_11_Pro_Max
+  iPhone_11
+  iPhone_XS_Max
+  iPhone_XS
+  iPhone_X
+  iPhone_XR
+  iPhone_8_Plus
+  iPhone_8
+  iPhone_7_Plus
+  iPhone_7
+}
+
+enum CaseMaterial {
+  silicone
+  soft_polycarbonate
+  leather
+}
+
+enum CaseFinish {
+  smooth_finish
+  matte_finish
+  glossy_finish
+}
+
+enum CaseColor {
+  blue
+  zinc
+  yellow
+  amber
+  rose
+  green
+  white
+}
+
+model Configuration {
+  id              String        @id @default(cuid())
+  height          Int
+  width           Int
+  imageUrl        String
+  croppedImageUrl String?
+  model           PhoneModel?
+  caseMaterial    CaseMaterial?
+  caseFinish      CaseFinish?
+  caseColor       CaseColor?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
