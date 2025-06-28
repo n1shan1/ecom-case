@@ -26,7 +26,11 @@ function PhoneMockup({ className, dark = false, imgSource, ...props }: Props) {
         alt="phone image"
       />
       <div className="absolute -z-10 inset-0">
-        <img src={imgSource} className="object-cover" alt="image" />
+        <img
+          src={imgSource}
+          className="object-cover min-h-full min-w-full"
+          alt="image"
+        />
       </div>
     </div>
   );

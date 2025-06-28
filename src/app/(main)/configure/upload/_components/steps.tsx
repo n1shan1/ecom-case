@@ -30,7 +30,7 @@ function Steps({}: Props) {
   const pathname = usePathname();
 
   return (
-    <ol className="rounded-md bg-background lg:flex lg:rounded-none lg:border-1  lg:border-muted-foreground/30">
+    <ol className="rounded-md bg-background lg:flex lg:rounded-none lg:border-1 lg:border-muted-foreground/30 p-4">
       {STEPS.map((step, index) => {
         const isCurrent = pathname.endsWith(step.url);
         const isCompleted = STEPS.slice(index + 1).some((step) =>

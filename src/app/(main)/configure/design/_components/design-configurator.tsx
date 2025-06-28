@@ -26,16 +26,19 @@ import {
   MODELS,
 } from "@/validators/options-validators";
 import { RadioGroup } from "@headlessui/react";
+import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, CheckIcon, ChevronsUpDown, Loader2 } from "lucide-react";
 import NextImage from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 import { toast } from "sonner";
+import {
+  saveConfig as _saveConfig,
+  SaveConfigArgsType,
+} from "../_actions/actions";
 import RndHandle from "./rnd-handles";
-import { useMutation } from "@tanstack/react-query";
-import { SaveConfigArgsType } from "../_actions/actions";
-import { saveConfig as _saveConfig } from "../_actions/actions";
-import { useRouter } from "next/navigation";
+
 type Props = {
   imageUrl: string;
   configId: string;
@@ -62,6 +65,7 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
     mutationKey: ["save-config"],
     mutationFn: async (args: SaveConfigArgsType) => {
       try {
+        toast.loading("Saving configuration...", { id: "save-config" });
         await Promise.all([saveConfiguration(), _saveConfig(args)]);
       } catch (error) {
         console.error("Error saving configuration:", error);
@@ -70,9 +74,11 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
     },
     onError: () => {
       console.error("Failed to save configuration");
+      toast.dismiss("save-config");
       toast.error("Failed to save configuration. Please try again.");
     },
     onSuccess: () => {
+      toast.dismiss("save-config");
       router.push(`/configure/preview?id=${configId}`);
       toast.success("Configuration saved successfully!");
     },
@@ -105,28 +111,29 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
       const { left: containerLeft, top: containerTop } =
         containerRef.current!.getBoundingClientRect() || {};
 
-      const leftOffset = caseLeft - containerLeft;
-      const topOffset = caseTop - containerTop;
-
-      const actualX = renderedPosition.x + leftOffset;
-      const actualY = renderedPosition.y + topOffset;
-
+      // Create a canvas that matches the phone case dimensions
       const canvas = document.createElement("canvas");
-      canvas.width = renderedDimensions.width;
-      canvas.height = renderedDimensions.height;
+      canvas.width = caseWidth;
+      canvas.height = caseHeight;
       const ctx = canvas.getContext("2d");
       if (!ctx) {
         throw new Error("Failed to get canvas context");
       }
+
       const userImage = new Image();
-      userImage.crossOrigin = "anonymous"; // Handle CORS if needed
+      userImage.crossOrigin = "anonymous";
       userImage.src = imageUrl;
       await new Promise((resolve) => (userImage.onload = resolve));
 
+      // Calculate the relative position of the image within the phone case
+      const imageX = renderedPosition.x;
+      const imageY = renderedPosition.y;
+
+      // Draw the user image on the canvas
       ctx.drawImage(
         userImage,
-        actualX,
-        actualY,
+        imageX,
+        imageY,
         renderedDimensions.width,
         renderedDimensions.height
       );
@@ -324,7 +331,7 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
                         }));
                       }}
                     >
-                      <Label>{name.slice(0, 1).toUpperCase()}</Label>
+                      <Label className="capitalize">{name}</Label>
                       <div className="mt-3 space-y-4">
                         {selectableOptions.map((option) => (
                           <RadioGroup.Option
@@ -393,6 +400,7 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
                 )}
               </p>
               <Button
+                disabled={isSavingConfig}
                 onClick={() => {
                   saveConfig({
                     configId,
@@ -408,15 +416,15 @@ function DesignConfigurator({ imageUrl, configId, dimensions }: Props) {
                 )}
               >
                 {isSavingConfig ? (
-                  <div>
+                  <>
                     <span>Saving...</span>{" "}
                     <Loader2 className="size-5 ml-1.5 inline animate-spin" />
-                  </div>
+                  </>
                 ) : (
-                  <div>
+                  <>
                     <span>Continue</span>{" "}
                     <ArrowRight className="size-5 ml-1.5 inline" />
-                  </div>
+                  </>
                 )}
               </Button>
             </div>

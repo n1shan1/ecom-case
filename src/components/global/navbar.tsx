@@ -17,7 +17,10 @@ function Navbar({}: Props) {
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-foreground/30 bg-background backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex h-14 items-center justify-between px-4 border-b border-foreground/10">
-          <Link href={"/"} className="flex z=40 font-semibold">
+          <Link
+            href={"/"}
+            className="flex z=40 font-semibold text-lg sm:text-2xl"
+          >
             You<span className="text-green-500">Case</span>
           </Link>
           <div className="h-full flex items-center space-x-4">
@@ -64,7 +67,7 @@ function Navbar({}: Props) {
               </Link>
               <div className="h-6 bg-foreground/10 w-px hidden sm:block" />
               <Link
-                href={"/sign-in"}
+                href={"/configure/upload"}
                 className={buttonVariants({
                   variant: "default",
                   size: "sm",
