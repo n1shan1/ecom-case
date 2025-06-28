@@ -46,7 +46,7 @@ async function Navbar({}: Props) {
                 })}
               >
                 Create Case
-                <ArrowRight className="size-5 text-background" />
+                <ArrowRight className="size-5 text-foreground" />
               </Link>
               <UserButton />
             </SignedIn>
