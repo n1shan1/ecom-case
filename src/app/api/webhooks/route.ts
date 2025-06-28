@@ -71,27 +71,52 @@ export async function POST(req: Request) {
             },
           },
         },
+        include: {
+          shippingAddress: true,
+        },
       });
 
-      await resend.emails.send({
-        from: "YouCase <nishantdev03@gmail.com>",
-        to: [event.data.object.customer_email!],
-        subject: "Thanks for your Order!",
-        react: OrderReceivedEmail({
-          orderId: orderId,
-          orderDate: updatedOrder.createdAt.toLocaleString(),
-          //@ts-ignore
-          shippingAddress: {
-            name: session.customer_details!.name!,
-            city: shippingAddress!.city!,
-            country: shippingAddress!.country!,
-            state: shippingAddress!.state!,
-            street: shippingAddress!.line1!,
-            zip: shippingAddress!.postal_code!,
-            phone: session.customer_details!.phone!,
-          },
-        }),
-      });
+      // Prepare shipping address for email
+      let shippingAddressForEmail: any = null;
+      if (updatedOrder.shippingAddress) {
+        // If the updated order includes the full shipping address, use it
+        shippingAddressForEmail = updatedOrder.shippingAddress;
+      } else {
+        // Fallback: use details from session
+        shippingAddressForEmail = {
+          id: "", // fallback empty
+          createdAt: new Date(), // fallback
+          updatedAt: new Date(), // fallback
+          name: session.customer_details?.name || "",
+          city: shippingAddress?.city || "",
+          country: shippingAddress?.country || "",
+          state: shippingAddress?.state || "",
+          street: shippingAddress?.line1 || "",
+          zip: shippingAddress?.postal_code || "",
+          phone: session.customer_details?.phone || null,
+        };
+      }
+
+      try {
+        if (session.customer_details && session.customer_details.email) {
+          await resend.emails.send({
+            from: "YouCase <nishantdev03@gmail.com>",
+            to: [session.customer_details.email as string],
+            subject: "Thanks for your Order!",
+            react: OrderReceivedEmail({
+              orderId: orderId,
+              orderDate: updatedOrder.createdAt.toLocaleString(),
+              shippingAddress: shippingAddressForEmail,
+            }),
+          });
+        } else {
+          console.error(
+            "No customer email found for order confirmation email."
+          );
+        }
+      } catch (emailError) {
+        console.error("Error sending order confirmation email:", emailError);
+      }
     }
     return NextResponse.json({ result: event, ok: true }, { status: 200 });
   } catch (error) {
