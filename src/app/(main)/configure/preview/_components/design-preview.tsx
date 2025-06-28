@@ -1,6 +1,6 @@
 "use client";
 import PhoneMockup from "@/components/global/phone";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { BASE_PRICE } from "@/config/product";
 import { cn, formatPrice } from "@/lib/utils";
 import {
@@ -9,16 +9,16 @@ import {
   MATERIALS,
   MODELS,
 } from "@/validators/options-validators";
+import { useUser } from "@clerk/nextjs";
 import { Configuration } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, CheckIcon, Loader2 } from "lucide-react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import Confetti from "react-dom-confetti";
-import { createCheckoutSession } from "../_actions/action";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Confetti from "react-dom-confetti";
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
+import { createCheckoutSession } from "../_actions/action";
 import LoginModal from "./login-modal";
 type Props = {
   configuration: Configuration;
@@ -33,7 +33,8 @@ function DesignPreview({ configuration }: Props) {
 
   const { id, caseColor, model, caseFinish, caseMaterial } = configuration;
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
-
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { user } = useUser();
   const tw = COLORS.find(
     (supportedColor) => supportedColor.value === caseColor
@@ -106,6 +107,7 @@ function DesignPreview({ configuration }: Props) {
       <div className="flex flex-col items-center mt-4 md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
         <div className="md:col-span-3 md:row-span-2 md:row-end-2 flex justify-center items-center">
           <PhoneMockup
+            dark={isDark}
             className={cn(
               "w-fit h-fit rounded-lg shadow-lg overflow-hidden max-w-[180px] md:max-w-full bg-white dark:bg-zinc-900 border border-muted",
               tw ? `bg-${tw}` : ""

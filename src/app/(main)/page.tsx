@@ -1,4 +1,4 @@
-import Footer from "@/components/global/footer";
+"use client";
 import { Icons } from "@/components/global/icons";
 import MaxWidthWrapper from "@/components/global/max-width-wrapper";
 import PhoneMockup from "@/components/global/phone";
@@ -6,11 +6,13 @@ import Reviews from "@/components/global/reviews";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Check, CheckIcon, StarIcon, Verified } from "lucide-react";
-import Image from "next/image";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 type Props = {};
 
 function MainPage({}: Props) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   return (
     <div className="bg-background">
       <section>
@@ -26,12 +28,15 @@ function MainPage({}: Props) {
                 Phone Case
               </h1>
               <p className="mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap">
-                Capture your favorite memories with your own,{" "}
-                <span className="">one-of-one</span> phone case.{" "}
-                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-800 to-blue-400">
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 text-3xl">
                   YouCase
                 </span>{" "}
-                allows you to protect your memories not just your phone case.
+                <span className="text-3xl">
+                  allows you to protect your memories not just your phone case.
+                </span>
+                <br />
+                Capture your favorite memories with your own,{" "}
+                <span className="">one-of-one</span> phone case.
               </p>
               <ul className="mt-8 space-y-2 text-left font-medium flex flex-col items-center sm:items-start">
                 <div className="space-y-2">
@@ -99,7 +104,11 @@ function MainPage({}: Props) {
                 className="absolute w-20 -left-6 -bottom-6 select-none"
                 alt=""
               />
-              <PhoneMockup className="w-64" imgSource={"/testimonials/1.jpg"} />
+              <PhoneMockup
+                dark={isDark}
+                className="w-64"
+                imgSource={"/testimonials/1.jpg"}
+              />
             </div>
           </div>
         </MaxWidthWrapper>
@@ -131,7 +140,7 @@ function MainPage({}: Props) {
                   "The case feels durable and I even got a compliment on the
                   design. Had a case fro 2 and a half months now and it still
                   looks brand new. I love it!{" "}
-                  <span className="bg-foreground rounded-sm p-1 text-white">
+                  <span className="bg-foreground rounded-sm p-1 text-background">
                     The image is super clear and accurate.
                   </span>{" "}
                   the case fits my phone perfectly."
@@ -166,7 +175,7 @@ function MainPage({}: Props) {
                   "I've been searching for a case that truly reflects my style,
                   and YouCase delivered beyond expectations! Every detail of my
                   photo is preserved perfectly.{" "}
-                  <span className="bg-foreground rounded-sm p-1 text-white">
+                  <span className="bg-foreground rounded-sm p-1 text-background">
                     Absolutely worth every penny for something so personalized.
                   </span>{" "}
                 </p>
@@ -223,7 +232,11 @@ function MainPage({}: Props) {
                   alt="image"
                 />
               </div>
-              <PhoneMockup className="w-60" imgSource="/horse_phone.jpg" />
+              <PhoneMockup
+                dark={isDark}
+                className="w-60"
+                imgSource="/horse_phone.jpg"
+              />
             </div>
           </div>
 
