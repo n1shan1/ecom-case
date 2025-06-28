@@ -40,5 +40,6 @@ export function constructMetadata({
       creator: "@n1sh_an1",
     },
     icons,
+    metadataBase: new URL("https://youcase.vercel.app/"),
   };
 }
