@@ -1,8 +1,6 @@
 import { db } from "@/db";
 import { notFound } from "next/navigation";
-import React from "react";
 import DesignPreview from "./_components/design-preview";
-import MaxWidthWrapper from "@/components/global/max-width-wrapper";
 
 type Props = {
   searchParams: {

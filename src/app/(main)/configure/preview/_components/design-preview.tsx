@@ -103,39 +103,42 @@ function DesignPreview({ configuration }: Props) {
         isDialogOpen={isLoginModalOpen}
         setIsDialogOpen={setIsLoginModalOpen}
       />
-      <div className="mt-4 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
-        <div className="sm:col-span-4 md:col-span-3 md:row-span-2 md:row-end-2">
+      <div className="flex flex-col items-center mt-4 md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
+        <div className="md:col-span-3 md:row-span-2 md:row-end-2 flex justify-center items-center">
           <PhoneMockup
-            className={`w-fit h-fit bg-${tw} rounded-lg shadow-lg overflow-hidden`}
+            className={cn(
+              "w-fit h-fit rounded-lg shadow-lg overflow-hidden max-w-[180px] md:max-w-full bg-white dark:bg-zinc-900 border border-muted",
+              tw ? `bg-${tw}` : ""
+            )}
             imgSource={configuration.imageUrl!}
           />
         </div>
-        <div className="mt-4 sm:col-span-9 sm:mt-0 md:row-end-1">
-          <h3 className="text-3xl font-bold tracking-tight text-foreground">
+        <div className="mt-4 sm:col-span-9 md:row-end-1 text-center sm:text-left flex flex-col justify-center">
+          <h3 className="text-3xl font-bold tracking-tight text-foreground text-center sm:text-left leading-tight">
             Your{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-blue-500">
               {modelLabel}
             </span>{" "}
             case is ready to be shipped, just waiting for your order!
           </h3>
-          <div className="mt-3 flex items-center gap-1.5 text-base">
+          <div className="mt-3 flex items-center gap-1.5 text-base text-center sm:text-left justify-center sm:justify-start">
             <CheckIcon className="size-5 text-primary" />
             In stock and ready to ship!
           </div>
         </div>
-        <div className="sm:col-span-12 md:col-span-9 text-base">
-          <div className="grid grid-cols-1 gap-y-4 border-b border-muted-foreground py-4 sm:grid-cols-2 sm:gap-x-6 sm:py-4 md:py-10 rounded">
+        <div className="sm:col-span-12 md:col-span-9 text-base mt-6 md:mt-0">
+          <div className="grid grid-cols-1 gap-y-4 border-b border-muted-foreground/20 py-4 sm:grid-cols-2 sm:gap-x-6 sm:py-4 md:py-10 rounded bg-muted/30">
             <div>
               <p className="font-medium text-lg text-foreground">Highlights</p>
-              <ol className="mt-3 text-muted-foreground list-disc list-inside">
+              <ol className="mt-3 text-muted-foreground list-disc list-inside space-y-1">
                 <li>Wireless Charging compatible.</li>
                 <li>5 Year print Warranty</li>
                 <li>TPU Shock resistance.</li>
               </ol>
             </div>
-            <div className="">
-              <p className="font-medi text-foreground">Material</p>
-              <ol className="mt-3 text-muted-foreground list-disc list-inside">
+            <div>
+              <p className="font-medium text-lg text-foreground">Material</p>
+              <ol className="mt-3 text-muted-foreground list-disc list-inside space-y-1">
                 <li>High Quality durable material.</li>
                 <li>Fingerprint Resistant.</li>
                 <li>Waterproof Coating overall.</li>
@@ -143,7 +146,7 @@ function DesignPreview({ configuration }: Props) {
             </div>
           </div>
           <div className="mt-6">
-            <div className="bg-muted-foreground/10 p-6 sm:rounded-lg sm:p-8 rounded">
+            <div className="bg-muted-foreground/10 p-6 sm:rounded-lg sm:p-8 rounded shadow-sm">
               <div className="flow-root text-sm">
                 <div className="flex items-center justify-between py-1">
                   <span className="text-muted-foreground capitalize flex items-center gap-2">
@@ -171,7 +174,9 @@ function DesignPreview({ configuration }: Props) {
                     </p>
                   </div>
                 ) : (
-                  <span>Finish Not Selected</span>
+                  <span className="block text-muted-foreground">
+                    Finish Not Selected
+                  </span>
                 )}
                 {caseMaterial ? (
                   <div className="flex items-center justify-between py-1 mt-2">
@@ -190,9 +195,11 @@ function DesignPreview({ configuration }: Props) {
                     </p>
                   </div>
                 ) : (
-                  <span>Material Not Selected.</span>
+                  <span className="block text-muted-foreground">
+                    Material Not Selected.
+                  </span>
                 )}
-                <div className="my-2 h-px bg-primary" />
+                <div className="my-2 h-px bg-primary/40" />
                 <div className="flex items-center justify-between py-2">
                   <p className="font-semibold text-foreground">Order Total:</p>
                   <p className="font-semibold text-foreground">
@@ -202,7 +209,12 @@ function DesignPreview({ configuration }: Props) {
               </div>
             </div>
             <div className="mt-8 flex justify-end pb-8">
-              <Button onClick={handleCheckOut} variant={"default"} size={"lg"}>
+              <Button
+                onClick={handleCheckOut}
+                variant={"default"}
+                size={"lg"}
+                className="shadow-md"
+              >
                 {isSessionLoading ? (
                   <span className="flex items-center gap-2">
                     Hold Tight!, Redirecting...

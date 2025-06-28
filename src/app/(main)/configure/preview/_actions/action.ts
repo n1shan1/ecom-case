@@ -89,7 +89,7 @@ export const createCheckoutSession = async ({
     });
 
     const stripeSession = await stripe.checkout.sessions.create({
-      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you/success?orderId=${order.id}`,
+      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${order.id}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/configure/preview?id=${configId}`,
       payment_method_types: ["card", "paypal", "amazon_pay"],
       shipping_address_collection: {

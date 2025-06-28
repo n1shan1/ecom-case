@@ -1,18 +1,18 @@
-"use client";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { ArrowRight, User, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import MaxWidthWrapper from "./max-width-wrapper";
 import { ModeToggle } from "./theme-toggle";
+import { currentUser } from "@clerk/nextjs/server";
 
 type Props = {};
 
-function Navbar({}: Props) {
-  const user = useUser();
-  const email = user.user?.emailAddresses[0]?.emailAddress || "";
+async function Navbar({}: Props) {
+  const user = await currentUser();
+  const email = user?.emailAddresses[0]?.emailAddress;
 
-  const isAdmin = email === "nishantdev03@gmail.com";
+  const isAdmin = email === process.env.ADMIN_EMAIL!;
   return (
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-foreground/30 bg-background backdrop-blur-lg transition-all">
       <MaxWidthWrapper>

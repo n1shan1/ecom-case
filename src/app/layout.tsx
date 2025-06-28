@@ -3,16 +3,14 @@ import { Outfit } from "@next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import AppProvider from "@/components/providers/app-provider";
+import { constructMetadata } from "@/lib/utils";
 
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
 });
 
-export const metadata: Metadata = {
-  title: "YouCase",
-  description: "Create personalized cases for your devices.",
-};
+export const metadata: Metadata = constructMetadata();
 
 export default function RootLayout({
   children,
