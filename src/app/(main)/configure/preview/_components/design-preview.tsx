@@ -73,7 +73,7 @@ function DesignPreview({ configuration }: Props) {
     },
     onError: (error) => {
       setShowConfetti(false);
-      console.error("Error creating checkout session:", error);
+      console.error("Error creating checkout session:", error); // Debug log
       alert("Failed to create checkout session. Please try again.");
       toast.error("Failed to create checkout session. Please try again.");
     },
@@ -81,10 +81,7 @@ function DesignPreview({ configuration }: Props) {
 
   const handleCheckOut = () => {
     if (user) {
-      toast.loading("Creating Checkout Session...", {
-        id: "checkout",
-      });
-      createCheckoutSession({
+      createSession({
         configId: configuration.id,
       });
     } else {
@@ -205,14 +202,7 @@ function DesignPreview({ configuration }: Props) {
               </div>
             </div>
             <div className="mt-8 flex justify-end pb-8">
-              <Button
-                onClick={() => {
-                  handleCheckOut();
-                }}
-                className={cn(
-                  buttonVariants({ variant: "default", size: "lg" })
-                )}
-              >
+              <Button onClick={handleCheckOut} variant={"default"} size={"lg"}>
                 {isSessionLoading ? (
                   <span className="flex items-center gap-2">
                     Hold Tight!, Redirecting...
